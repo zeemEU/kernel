@@ -1,0 +1,632 @@
+linux-grouper (3.1.10-6.20) saucy; urgency=low
+
+  [ Colin Ian King ]
+
+  * [Config] enable deadline I/O scheduler by default
+    Testing shows that the deadline scheduler on the flash file system
+    performs slightly better than CFQ.  It also consumes marginally less
+    power.  So enable deadline by default.
+
+  [ John Johansen ]
+
+  * SAUCE: (no-up) apparmor: fix apparmor module status for none root users
+    - LP: #1199912
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Thu, 11 Jul 2013 07:58:54 -0600
+
+linux-grouper (3.1.10-6.19) saucy; urgency=low
+
+  [ Tim Gardner ]
+
+  * [Config] Harmonize NF, NETFILTER, IP_NF, and IP6_NF options
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 09 Jul 2013 12:51:48 -0600
+
+linux-grouper (3.1.10-6.18) saucy; urgency=low
+
+  [ Tim Gardner ]
+
+  * [Config] Enable more NF options
+    - LP: #1199351
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 09 Jul 2013 11:27:29 -0600
+
+linux-grouper (3.1.10-6.17) saucy; urgency=low
+
+  [ Tim Gardner ]
+
+  * smb347: Fix stack corruption
+    - LP: #1190225
+  * smb347: Do a better job of status register read error detection
+    - LP: #1190225
+  * tegra fb: fix NULL deref in sysfs
+    - LP: #1190225
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 09 Jul 2013 08:43:40 -0600
+
+linux-grouper (3.1.10-6.16) saucy; urgency=low
+
+  [ Andy Whitcroft ]
+
+  * [Config] CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+    - LP: #1194850
+  * [Config] CONFIG_ELF_CORE=y
+    - LP: #1108082, #1197862
+
+ -- Andy Whitcroft <apw@canonical.com>  Wed, 26 Jun 2013 15:28:18 +0100
+
+linux-grouper (3.1.10-6.15) saucy; urgency=low
+
+  [ John Johansen ]
+
+  * SAUCE: apparmor: 3.1 backport of apparmor3
+
+  [ Tim Gardner ]
+
+  * [debian] Use dh_strip
+    - LP: #1192759
+  * do_tools=false when cross compiling
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 25 Jun 2013 08:54:50 -0600
+
+linux-grouper (3.1.10-6.14) saucy; urgency=low
+
+  [ Tim Gardner ]
+
+  * Revert "SAUCE: prevent the brightness from going all the way off when
+    using the brightness slider."
+    - LP: #1187867
+  * [Config] CONFIG_FRAMEBUFFER_CONSOLE=n
+  * Fix insertchanges for grouper
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Wed, 19 Jun 2013 06:30:12 -0600
+
+linux-grouper (3.1.10-5.13) saucy; urgency=low
+
+  * UBUNTU: [Config] Enable and modularize all netfilter matches
+    -LP: #1191197
+  * UBUNTU: Sync enforcer with master
+  * UBUNTU: [Config] CONFIG_FRAMEBUFFER_CONSOLE=y
+  * UBUNTU: [Config] CONFIG_BLK_DEV_RAM=y
+  * UBUNTU: [Config] CONFIG_SYN_COOKIES=y
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Fri, 14 Jun 2013 13:45:43 -0600
+
+linux-grouper (3.1.10-4.12) saucy; urgency=low
+
+  * UBUNTU: Move all in-dep build depends to Build-depends
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Wed, 12 Jun 2013 18:29:00 -0600
+
+linux-grouper (3.1.10-4.11) saucy; urgency=low
+
+  * UBUNTU: Fix headers and tools-common packaging harder
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Wed, 12 Jun 2013 13:57:19 -0600
+
+linux-grouper (3.1.10-4.10) saucy; urgency=low
+
+    * Revert "UBUNTU: HAVE_CPLUS_DEMANGLE=n"
+      The reason for this was because of a binutils package sync from Debian
+      wherein liberty was accidentally dropped. Revert this change to restore
+      the original behavior and remove the dependency on libiberty.
+    * UBUNTU: Fix headers and tools-common packaging
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Wed, 12 Jun 2013 06:51:41 -0600
+
+linux-grouper (3.1.10-4.9) saucy; urgency=low
+
+  * HAVE_CPLUS_DEMANGLE=n
+    Fixes FTBS because binutils-dev no longer publishes liberty.
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 11 Jun 2013 13:06:51 -0600
+
+linux-grouper (3.1.10-4.8) saucy; urgency=low
+
+    * UBUNTU: [Config] CONFIG_VT=y
+      Fixes boot issues with swapped container model, e.g., booting
+      Ubuntu with Android in a container.
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 11 Jun 2013 08:24:52 -0600
+
+linux-grouper (3.1.10-3.7) saucy; urgency=low
+
+  * UBUNTU: Build-Depends: python-dev
+    Fixes FTBS
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Fri, 07 Jun 2013 12:09:30 -0600
+
+linux-grouper (3.1.10-3.6) saucy; urgency=low
+
+  [ Tim Gardner ]
+
+  * Enable perf tools build. New packages are:
+    linux-grouper-tools-3.1.10 and
+    linux-grouper-tools-common.
+  * UBUNTU: CONFIG_KEYS=y
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Thu, 06 Jun 2013 10:24:25 -0600
+
+linux-grouper (3.1.10-3.5) saucy; urgency=low
+
+  [ Tim Gardner ]
+
+  * UBUNTU: Sync with mainline distro defconfig
+    UBUNTU: CONFIG_TMPFS_POSIX_ACL=y
+    UBUNTU: CONFIG_DEVTMPFS_MOUNT=y
+    UBUNTU: CONFIG_DEFAULT_MMAP_MIN_ADDR=32768
+    UBUNTU: CONFIG_STRICT_DEVMEM=y
+    UBUNTU: CONFIG_CC_STACKPROTECTOR=y
+    UBUNTU: CONFIG_SECCOMP=y
+    UBUNTU: CONFIG_SECURITY=y
+    UBUNTU: CONFIG_COMPAT_BRK=n
+  * UBUNTU: The kernel does not depend on wireless-crda
+  * UBUNTU: Enable lttng
+  * UBUNTU: undef TRACE_HEADER_MULTI_READ in lttng ext3.h
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Thu, 30 May 2013 08:01:19 -0600
+
+linux-grouper (3.1.10-3.4) saucy; urgency=low
+
+  [ Tim Gardner ]
+
+  * UBUNTU: Sync with phablet defconfig
+  * UBUNTU: Force gcc-4.6
+  * Rebase against git://phablet.ubuntu.com/CyanogenMod/android_kernel_asus_grouper.git d738a59c2c58fe7b874a8a7d82d0b4ba4eb0ca8c
+    Dropped conflicting and superfluous UBUNTU battery patches.
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Thu, 23 May 2013 06:32:46 -0600
+
+linux-grouper (3.1.10-2.3) saucy; urgency=low
+
+  [ Tim Gardner ]
+
+  * Added ubuntu directory and build files
+  * Added lttng
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 21 May 2013 13:45:39 -0600
+
+linux-grouper (3.1.10-2.2) saucy; urgency=low
+
+  [ Andy Whitcroft ]
+
+  * [Packaging] sync debian to saucy master-next
+  * [Packaging] switch headers to src package specific naming
+  * Disable udeb generation
+
+  [ Ricardo Salveti de Araujo ]
+
+  * [Config] Restoring Android related configs needed by Ubuntu Touch
+
+ -- Andy Whitcroft <apw@canonical.com>  Fri, 10 May 2013 16:55:34 +0100
+
+linux-grouper (3.1.10-1.1) saucy; urgency=low
+
+  [ Andy Whitcroft ]
+
+  * Revert "UBUNTU: SAUCE: Detect touchscreen"
+  * [Packaging] switch package name to grouper 
+
+ -- Andy Whitcroft <apw@canonical.com>  Thu, 02 May 2013 01:22:19 +0100
+
+linux-nexus7 (3.1.10-10.28) raring; urgency=low
+
+  [ Andy Whitcroft ]
+
+  * ubuntu: overlayfs -- overlayfs: add statfs support
+    - LP: #1076317
+  * ubuntu: overlayfs -- overlayfs: apply device cgroup and security
+    permissions to overlay files
+    - LP: #1076317, #915941, #918212
+    - CVE-2012-0055
+  * [packaging] Rename from linaro to nexus7 -- part 2
+
+  [ Erez Zadok ]
+
+  * ubuntu: overlayfs -- overlayfs: implement show_options
+    - LP: #1076317
+
+  [ Miklos Szeredi ]
+
+  * ubuntu: overlayfs -- vfs: pass struct path to __dentry_open()
+    - LP: #1076317
+  * ubuntu: overlayfs -- vfs: add i_op->open()
+    - LP: #1076317
+  * ubuntu: overlayfs -- vfs: export do_splice_direct() to modules
+    - LP: #1076317
+  * ubuntu: overlayfs -- vfs: introduce clone_private_mount()
+    - LP: #1076317
+  * ubuntu: overlayfs -- overlay filesystem
+    - LP: #1076317
+  * ubuntu: overlayfs -- fs: limit filesystem stacking depth
+    - LP: #1076317
+
+  [ Neil Brown ]
+
+  * ubuntu: overlayfs -- overlay: overlay filesystem documentation
+    - LP: #1076317
+
+  [ Paolo Pisati ]
+
+  * [Config] OVERLAYFS_FS=m
+    - LP: #1076317
+  * SAUCE: compilation fix for missing symbols
+    - LP: #1076317
+
+  [ Tim Gardner ]
+
+  * Rebased against git://phablet.ubuntu.com/CyanogenMod/android_kernel_asus_grouper.git phablet-10.1
+  * Updated configs to be more device consistent with
+    arch/arm/configs/cyanogenmod_grouper_defconfig
+    https://wiki.ubuntu.com/Touch/Porting#Kernel
+    http://phablet.ubuntu.com/gitweb?p=CyanogenMod/android_kernel_asus_grouper.git;a=shortlog;h=refs/heads/phablet-10.1
+  * Pull config changes from git://phablet.ubuntu.com/CyanogenMod/android_kernel_asus_grouper.git phablet-10.1
+    CONFIG_NAMESPACES=y
+    CONFIG_UTS_NS=y
+    CONFIG_IPC_NS=y
+    CONFIG_USER_NS=y
+    CONFIG_PID_NS=y
+    CONFIG_NET_NS=y
+    CONFIG_DEVTMPFS=y
+    CONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+    CONFIG_DNOTIFY=y
+    CONFIG_FANOTIFY=y
+    CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
+    ONFIG_ANDROID_PARANOID_NETWORK=n
+    ONFIG_DEVPTS_MULTIPLE_INSTANCES=y
+    CONFIG_SYSVIPC=y
+  * [packaging] Rename from linaro to nexus7
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Wed, 27 Feb 2013 11:55:02 -0700
+
+linux-nexus7 (3.1.10-9.27) raring; urgency=low
+
+  [ Upstream Kernel Changes ]
+
+  * Rebase against android-tegra3-grouper-3.1-jb-mr1.1
+    Proximity: Enable sensor by it's previous RIL setting when device resume from suspend.
+    video: tegra: host: better error handling in alloc_gathers()
+    net: wireless: bcmdhd: Enable P2P probe request handling only during discovery
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 19 Feb 2013 09:22:12 -0700
+
+linux-nexus7 (3.1.10-9.26) raring; urgency=low
+
+  [ Andy Whitcroft ]
+
+  * SAUCE: (no-up) quiet down stop_machine when running normally
+    - LP: #1113396
+  * SAUCE: cpu-tegra3: reduce noise waking and sleeping CPUs
+    - LP: #1113396
+  * SAUCE: (no-up) quiet CPU start/stop when system running normally
+    - LP: #1113396
+  * SAUCE: tegra -- quiet cpu start messages when system running normally
+    - LP: #1113396
+
+  [ Upstream Kernel Changes ]
+
+  * ASoC: Disable "Register Control" for RT5640
+    - LP: #1068804
+
+ -- Andy Whitcroft <apw@canonical.com>  Mon, 04 Feb 2013 20:18:24 +0000
+
+linux-nexus7 (3.1.10-9.25) raring; urgency=low
+
+  [ Alex Hornung ]
+
+  * SAUCE: power: bq27541_battery - fix units of energy_now
+  * SAUCE: power: bq27541_driver - Add charge_full, charge_full_design
+
+ -- Andy Whitcroft <apw@canonical.com>  Thu, 31 Jan 2013 11:26:26 +0000
+
+linux-nexus7 (3.1.10-9.24) raring; urgency=low
+
+  [ Alex Hornung ]
+
+  * SAUCE: power: bq27541_battery - Provide current_now
+    - LP: #1093543
+
+  [ Andy Whitcroft ]
+
+  * [Config] switch from USB_G_SERIAL to USB_CDC_COMPOSITE
+
+ -- Andy Whitcroft <apw@canonical.com>  Wed, 30 Jan 2013 12:14:28 +0000
+
+linux-nexus7 (3.1.10-9.23) raring; urgency=low
+
+  [ Alex Hornung ]
+
+  * SAUCE: power: bq27541 driver - serialize get_property
+    - LP: #1093543
+  * SAUCE: power: bq27541_battery - Provide energy measurement
+    - LP: #1109183
+
+ -- Andy Whitcroft <apw@canonical.com>  Tue, 29 Jan 2013 20:07:36 +0000
+
+linux-nexus7 (3.1.10-9.22) raring; urgency=low
+
+  [ Jani Monoses ]
+
+  * Revert "SAUCE: Report landscape mode coordinates in touchscreen"
+
+  [ Tim Gardner ]
+
+  * SAUCE: (no-up) raise the default console 'quiet' level to 2
+
+ -- Andy Whitcroft <apw@canonical.com>  Tue, 29 Jan 2013 09:38:31 +0000
+
+linux-nexus7 (3.1.10-8.21) raring; urgency=low
+
+  [ Scott James Remnant ]
+
+  * SAUCE: (no-up) trace: add trace events for open(), exec() and uselib()
+    - LP: #1096919
+
+  [ Tim Gardner ]
+
+  * [Config] CONFIG_FONTS=n, CONFIG_FONT_8x8=y
+    Make consistent with x86 kernel.
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Tue, 08 Jan 2013 06:19:21 -0700
+
+linux-nexus7 (3.1.10-8.20) raring; urgency=low
+
+  [ Tim Gardner ]
+
+  * [Config] CONFIG_BLK_DEV_IO_TRACE=y
+    - LP: #1096919
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Mon, 07 Jan 2013 08:28:50 -0700
+
+linux-nexus7 (3.1.10-8.19) raring; urgency=low
+
+  [ Stéphane Graber ]
+
+  * [Config] missing modules for LXC
+    enable bridging and associated filter modules.
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Wed, 02 Jan 2013 05:59:39 -0700
+
+linux-nexus7 (3.1.10-8.18) raring; urgency=low
+
+  [ Tim Gardner ]
+
+  * [Config] CONFIG_ELF_CORE=y
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Fri, 14 Dec 2012 07:45:39 -0700
+
+linux-nexus7 (3.1.10-8.17) raring; urgency=low
+
+  [ Tim Gardner ]
+
+  * [Config] Updated getabis path
+
+  [ Upstream Kernel Changes ]
+
+  * Revert "Bluetooth: Add ACL MTU, available buffers and total buffers to
+    hci_conn_info."
+    - LP: #1070770
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Thu, 06 Dec 2012 07:26:05 -0700
+
+linux-nexus7 (3.1.10-8.16) raring; urgency=low
+
+  [ Oliver Grawert ]
+
+  * [Config] enable g_serial gadget by default on nexus7
+    CONFIG_USB_G_SERIAL=y
+    CONFIG_USB_G_ANDROID=n
+
+  [ Tim Gardner ]
+
+  * [Config] Update Vcs-Git URL
+    Vcs-Git: git://kernel.ubuntu.com/ubuntu/ubuntu-nexus7.git
+
+ --  Tim Gardner <tim.gardner@canonical.com>  Wed, 05 Dec 2012 07:05:46 -0700
+
+linux-nexus7 (3.1.10-8.15) raring; urgency=low
+
+  [ Vojtech Bocek ]
+
+  * Enable caching and buffering of whole RAM in the decompressor
+  * Support copying of atags in the decompressor.
+
+ -- Tim Gardner <tim.gardner@canonical.com>  Thu, 29 Nov 2012 12:34:30 -0500
+
+linux-nexus7 (3.1.10-8.14) raring; urgency=low
+
+  [ Colin Ian King ]
+
+  * SAUCE: bq27541_battery: Add in extra battery properties.
+    (refactored for merge conflicts)
+
+  [ David Henningsson ]
+
+  * SAUCE: This is the only type of jack detection that PulseAudio
+    supports.
+    (refactored for merge conflicts)
+
+  [ Seth Forshee ]
+
+  * SAUCE: bq27541_battery: Fix unused variable warnings
+    (refactored for merge conflicts)
+
+  [ Tim Gardner ]
+
+  * Rebased against android-tegra3-grouper-3.1-jb-mr1, bump ABI
+    CONFIG_MACH_TEGRA_ENTERPRISE=n
+    CONFIG_SND_SOC_TEGRA_MAX98088=n
+    CONFIG_TEGRA_BB_XMM_POWER2=y
+    CONFIG_TEGRA_BB_XMM_POWER=y
+    CONFIG_ARM_ERRATA_764369=y
+    CONFIG_RIL=y
+    CONFIG_SENSORS_CAP1106=y
+    CONFIG_UHID=y
+
+  * Removed some generated files from git
+    debian.linaro/control.stub
+    debian.linaro/d-i/kernel-versions
+
+ -- Tim Gardner <tim.gardner@canonical.com>  Wed, 14 Nov 2012 15:34:11 -0500
+
+linux-nexus7 (3.1.10-7.13) raring; urgency=low
+
+  [ Colin Ian King ]
+
+  * SAUCE: bq27541_battery: remove charge full and full design
+    - LP: #1077062
+
+  [ Matthew Fischer ]
+
+  * SAUCE: prevent the brightness from going all the way off when using the
+    brightness slider.
+    - LP: #1071259
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Sat, 10 Nov 2012 18:09:13 +0200
+
+linux-nexus7 (3.1.10-7.12) raring; urgency=low
+
+  * Switch to dpkg-source 3.0 (native) format.
+  * Disable building tools for now.
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Tue, 06 Nov 2012 22:34:22 +0200
+
+linux-nexus7 (3.1.10-7.11) quantal; urgency=low
+
+  [ Jani Monoses ]
+
+  * Revert "SAUCE: USB_OTG charging fixes."
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Thu, 01 Nov 2012 10:12:40 +0200
+
+linux-nexus7 (3.1.10-7.10) quantal; urgency=low
+
+  [ Jani Monoses ]
+
+  * [Config] Enable ISO_9660_FS
+  * [Config] Various options needed for LXC support.
+  * [Config] Enable SND_USB_AUDIO, disable SND_HDA_INTEL
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Tue, 30 Oct 2012 18:12:14 +0200
+
+linux-nexus7 (3.1.10-6.9) quantal; urgency=low
+
+  [ Colin Ian King ]
+
+  * SAUCE: bq27541_battery: Add in extra battery properties.
+
+  [ Jani Monoses ]
+
+  * SAUCE: USB_OTG charging fixes.
+  * [Config] Enable NFS
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Mon, 29 Oct 2012 08:42:20 +0200
+
+linux-nexus7 (3.1.10-6.8) quantal; urgency=low
+
+  * [Config] CONFIG_ANDROID_RAM_CONSOLE_ENABLE_VERBOSE=n
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Wed, 24 Oct 2012 12:19:27 +0300
+
+linux-nexus7 (3.1.10-6.7) quantal; urgency=low
+
+  [ David Henningsson ]
+
+  * SAUCE: This is the only type of jack detection that PulseAudio
+    supports.
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Mon, 22 Oct 2012 21:03:01 +0300
+
+linux-nexus7 (3.1.10-6.6) quantal; urgency=low
+
+  [ Upstream Kernel Changes ]
+
+  * Rebase on the android-tegra3-grouper-3.1-jb-mr0 branch, the one the
+    Google kernel corresponding to the 4.1.2 update is built from.
+
+    009b6d1 mmc: card: Bypass discard for Hynix and Kingston
+    3de09ec mmc: core: new discard feature support at Samsung eMMC v4.41+.
+    2562ea0 mmc: set emmc vcore voltage to 3.0V
+    9a76feb net: wireless: bcmdhd: Report proper mcs rate mask
+    a01e715 arm: tegra: grouper: ti-pmu: set ldo1 as 'always on'
+    34d1bea mmc: tegra: Disable card and host clk separately
+    c3ff7f3 When user power off the device with USB/AC cable plugged, it will reboot the device to the charger mode.
+    6b4b46e To erase the registers of TPS6591's RTC alarm to avoid the device power-on by RTC alarm.
+    d05e7e3 grouper: misc: Fixed bug to PMIC's identification API
+    de68484 Mask tps6591x's GPIO4 falling-edge detection interrupt in shutdown sequence.
+    60321b5 Camera: add TI PMIC support
+    240b335 arm: usb_phy: decide the vbus irq by pmu hw pin.
+    9251a95 grouper: misc: Add PCB_ID8 and redefine board revision for nakasi
+    954750a arm: grouper: pinmux: Configure a new pingroup GMI_CS2_N for PCBID
+    1b285da remove "vdd" from fixed_reg_en_3v3_sys_supply.
+    f6447cf Use the misc function to query PMIC ID.
+    12ff371 To avoid warm reboot fail.
+    7e7f016 For power tree of TI PMU, sync the board-grouper-power-ti.c to board-cardhu-power.c
+    7fe8a94 mfd: tps6591x: Avoid possible race condition
+    bb46609 mfd: tps6591x: Implement proper power off sequence.
+    23f4779 upgarde PMU driver to 16r4.
+    00f1038 Add TI's PMIC power tree.
+    a27b1a4 USB: gadget: f_audio_source: Fix use after free in audio_unbind
+    0ba3ed8 USB: gadget: f_audio_source: Fix error handling and increase packet size
+    0863307 Touch: Update touch firmware and notify power source
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Wed, 17 Oct 2012 15:37:47 +0300
+
+linux-nexus7 (3.1.10-5.5) quantal; urgency=low
+
+  [ Jani Monoses ]
+
+  * [Config] SND_HDA_INTEL=m
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Tue, 16 Oct 2012 14:39:02 +0300
+
+linux-nexus7 (3.1.10-4.4) quantal; urgency=low
+
+  [ Jani Monoses ]
+
+  * [Config] Disable wakelocks and earlysuspend to fix
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Tue, 16 Oct 2012 00:07:37 +0300
+
+linux-nexus7 (3.1.10-3.3) quantal; urgency=low
+
+  [ Jani Monoses ]
+
+  * SAUCE: Report landscape mode coordinates in touchscreen
+
+  [ Oliver Grawert ]
+
+  * [Config] Update config to be more in sync with mainline.
+
+  [ Seth Forshee ]
+
+  * SAUCE: Input: ektf3k: Fix up indentation.
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Thu, 11 Oct 2012 21:38:54 +0300
+
+linux-nexus7 (3.1.10-2.2) quantal; urgency=low
+
+  [ Jani Monoses ]
+
+  * Start new release
+  * [Config] Enable SYSVIPC and POSIX_MQUEUE
+  * [Config] CONFIG_SECURITY_APPARMOR_COMPAT_24=y
+  * [Config] Disable DHD_ENABLE_P2P, makes wifi work
+  * SAUCE: Detect touchscreen
+
+  [ Marc Dietrich ]
+
+  * SAUCE: add Apparmor patches.
+
+  [ Seth Forshee ]
+
+  * SAUCE: bq27541_battery: Demote BAT_NOTICE messages to debug
+  * SAUCE: bq27541_battery: Fix unused variable warnings
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Tue, 09 Oct 2012 20:14:33 +0300
+
+linux-nexus7 (3.1.10-1.1) quantal; urgency=low
+
+   * Ubuntu-3.1.10-1.1
+
+ -- Jani Monoses <jani.monoses@canonical.com>  Wed, 03 Oct 2012 15:21:10 +0300
