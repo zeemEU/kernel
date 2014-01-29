@@ -1,0 +1,163 @@
+=== modified file 'drivers/input/touchscreen/ektf3k.c'
+--- drivers/input/touchscreen/ektf3k.c	2013-05-02 01:22:19 +0000
++++ drivers/input/touchscreen/ektf3k.c	2013-08-09 05:28:45 +0000
+@@ -929,6 +929,7 @@
+               fbits = fbits >> 1;
+               idx += 3;
+ 	    }
++		input_mt_report_pointer_emulation(ts->input_dev, true);
+           input_sync(idev);
+ 	} // checksum
+ 	else {
+@@ -956,7 +957,6 @@
+ 	if ( (num < 3) || ((checksum & 0x00ff) == buf[34])) {   
+           fbits = buf[2] & 0x30;	
+ 	    fbits = (fbits << 4) | buf[1]; 
+-	    //input_report_key(idev, BTN_TOUCH, 1);
+           for(i = 0; i < FINGER_NUM; i++){
+               active = fbits & 0x1;
+               if(active || mTouchStatus[i]){
+@@ -979,6 +979,7 @@
+               fbits = fbits >> 1;
+               idx += 3;
+ 	    }
++		input_mt_report_pointer_emulation(ts->input_dev, true);
+           input_sync(idev);
+ 	} // checksum
+ 	else {
+@@ -1505,11 +1506,15 @@
+ 	}
+ 	ts->input_dev->name = "elan-touchscreen";  
+ 
+-	//set_bit(BTN_TOUCH, ts->input_dev->keybit);
++	set_bit(BTN_TOUCH, ts->input_dev->keybit);
+ 	ts->abs_x_max =  pdata->abs_x_max;
+ 	ts->abs_y_max = pdata->abs_y_max;
+ 	touch_debug(DEBUG_INFO, "[Elan] Max X=%d, Max Y=%d\n", ts->abs_x_max, ts->abs_y_max);
+ 
++	input_set_abs_params(ts->input_dev, ABS_X, pdata->abs_y_min, pdata->abs_y_max, 0, 0); // for 800 * 1280
++	input_set_abs_params(ts->input_dev, ABS_Y, pdata->abs_x_min, pdata->abs_x_max, 0, 0); // for 800 * 1280
++	input_set_abs_params(ts->input_dev, ABS_PRESSURE, 0, MAX_FINGER_PRESSURE, 0, 0);
++
+ 	input_mt_init_slots(ts->input_dev, FINGER_NUM);
+ 	input_set_abs_params(ts->input_dev, ABS_MT_POSITION_X, pdata->abs_y_min,  pdata->abs_y_max, 0, 0); // for 800 * 1280 
+ 	input_set_abs_params(ts->input_dev, ABS_MT_POSITION_Y, pdata->abs_x_min,  pdata->abs_x_max, 0, 0);// for 800 * 1280 
+
+=== modified file 'drivers/net/usb/asix.c'
+--- drivers/net/usb/asix.c	2013-05-02 01:22:19 +0000
++++ drivers/net/usb/asix.c	2013-12-29 06:25:36 +0000
+@@ -1485,6 +1485,10 @@
+ 	USB_DEVICE (0x6189, 0x182d),
+ 	.driver_info =  (unsigned long) &ax8817x_info,
+ }, {
++	// Sitecom LN-031 "USB 2.0 10/100/1000 Ethernet adapter"
++	USB_DEVICE (0x0df6, 0x0056),
++	.driver_info =  (unsigned long) &ax88178_info,
++}, {
+ 	// corega FEther USB2-TX
+ 	USB_DEVICE (0x07aa, 0x0017),
+ 	.driver_info =  (unsigned long) &ax8817x_info,
+@@ -1501,6 +1505,10 @@
+ 	USB_DEVICE (0x04f1, 0x3008),
+ 	.driver_info = (unsigned long) &ax8817x_info,
+ }, {
++	// Lenovo U2L100P 10/100
++	USB_DEVICE (0x17ef, 0x7203),
++	.driver_info = (unsigned long) &ax88772_info,
++}, {
+ 	// ASIX AX88772B 10/100
+ 	USB_DEVICE (0x0b95, 0x772b),
+ 	.driver_info = (unsigned long) &ax88772_info,
+@@ -1533,6 +1541,10 @@
+ 	USB_DEVICE (0x2001, 0x3c05),
+ 	.driver_info = (unsigned long) &ax88772_info,
+ }, {
++	// DLink DUB-E100 H/W Ver C1
++	USB_DEVICE (0x2001, 0x1a02),
++	.driver_info = (unsigned long) &ax88772_info,
++}, {
+ 	// Linksys USB1000
+ 	USB_DEVICE (0x1737, 0x0039),
+ 	.driver_info = (unsigned long) &ax88178_info,
+
+=== modified file 'drivers/usb/otg/tegra-otg.c'
+--- drivers/usb/otg/tegra-otg.c	2013-05-02 01:22:19 +0000
++++ drivers/usb/otg/tegra-otg.c	2013-08-06 15:30:56 +0000
+@@ -188,7 +188,7 @@
+ 		container_of(work, struct tegra_otg_data, work);
+ 	struct otg_transceiver *otg = &tegra->otg;
+ 	enum usb_otg_state from = otg->state;
+-	enum usb_otg_state to = OTG_STATE_UNDEFINED;
++	enum usb_otg_state to;
+ 	unsigned long flags;
+ 	unsigned long status;
+ 
+@@ -204,47 +204,37 @@
+ 
+ 	status = tegra->int_status;
+ 
+-	if (tegra->int_status & USB_ID_INT_STATUS) {
+-		if (status & USB_ID_STATUS) {
+-			if ((status & USB_VBUS_STATUS) && (from != OTG_STATE_A_HOST))
+-				to = OTG_STATE_B_PERIPHERAL;
+-			else
+-				to = OTG_STATE_A_SUSPEND;
+-		}
++	if (status & USB_ID_STATUS) {
++		if ((status & USB_VBUS_STATUS) && from != OTG_STATE_A_HOST)
++			to = OTG_STATE_B_PERIPHERAL;
+ 		else
+-			to = OTG_STATE_A_HOST;
+-	}
+-	if (from != OTG_STATE_A_HOST) {
+-		if (tegra->int_status & USB_VBUS_INT_STATUS) {
+-			if (status & USB_VBUS_STATUS)
+-				to = OTG_STATE_B_PERIPHERAL;
+-			else
+-				to = OTG_STATE_A_SUSPEND;
+-		}
+-	}
++			to = OTG_STATE_A_SUSPEND;
++	}
++	else
++		to = OTG_STATE_A_HOST;
++
+ 	spin_unlock_irqrestore(&tegra->lock, flags);
+ 
+-	if (to != OTG_STATE_UNDEFINED) {
++	if (to != from) {
+ 		otg->state = to;
+ 
+ 		dev_info(tegra->otg.dev, "%s --> %s\n", tegra_state_name(from),
+ 					      tegra_state_name(to));
+ 
++		/*
+ 		if (tegra->charger_cb)
+ 			tegra->charger_cb(to, from, tegra->charger_cb_data);
+-
+-		if (to == OTG_STATE_A_SUSPEND) {
+-			if (from == OTG_STATE_A_HOST)
+-				tegra_stop_host(tegra);
+-			else if (from == OTG_STATE_B_PERIPHERAL && otg->gadget)
+-				usb_gadget_vbus_disconnect(otg->gadget);
+-		} else if (to == OTG_STATE_B_PERIPHERAL && otg->gadget) {
+-			if (from == OTG_STATE_A_SUSPEND)
+-				usb_gadget_vbus_connect(otg->gadget);
+-		} else if (to == OTG_STATE_A_HOST) {
+-			if (from == OTG_STATE_A_SUSPEND)
++		*/
++
++		if (from == OTG_STATE_A_HOST)
++			tegra_stop_host(tegra);
++		else if (from == OTG_STATE_B_PERIPHERAL && otg->gadget)
++			usb_gadget_vbus_disconnect(otg->gadget);
++
++		if (to == OTG_STATE_A_HOST)
+ 			tegra_start_host(tegra);
+-		}
++		else if (to == OTG_STATE_B_PERIPHERAL && otg->gadget)
++			usb_gadget_vbus_connect(otg->gadget);
+ 	}
+ 
+ 
+
