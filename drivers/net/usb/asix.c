@@ -1485,6 +1485,10 @@ static const struct usb_device_id	products [] = {
 	USB_DEVICE (0x6189, 0x182d),
 	.driver_info =  (unsigned long) &ax8817x_info,
 }, {
+	// Sitecom LN-031 "USB 2.0 10/100/1000 Ethernet adapter"
+	USB_DEVICE (0x0df6, 0x0056),
+	.driver_info =  (unsigned long) &ax88178_info,
+}, {
 	// corega FEther USB2-TX
 	USB_DEVICE (0x07aa, 0x0017),
 	.driver_info =  (unsigned long) &ax8817x_info,
@@ -1500,6 +1504,10 @@ static const struct usb_device_id	products [] = {
 	// JVC MP-PRX1 Port Replicator
 	USB_DEVICE (0x04f1, 0x3008),
 	.driver_info = (unsigned long) &ax8817x_info,
+}, {
+	// Lenovo U2L100P 10/100
+	USB_DEVICE (0x17ef, 0x7203),
+	.driver_info = (unsigned long) &ax88772_info,
 }, {
 	// ASIX AX88772B 10/100
 	USB_DEVICE (0x0b95, 0x772b),
@@ -1531,6 +1539,10 @@ static const struct usb_device_id	products [] = {
 }, {
 	// DLink DUB-E100 H/W Ver B1 Alternate
 	USB_DEVICE (0x2001, 0x3c05),
+	.driver_info = (unsigned long) &ax88772_info,
+}, {
+	// DLink DUB-E100 H/W Ver C1
+	USB_DEVICE (0x2001, 0x1a02),
 	.driver_info = (unsigned long) &ax88772_info,
 }, {
 	// Linksys USB1000

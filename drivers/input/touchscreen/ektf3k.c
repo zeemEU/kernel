@@ -929,6 +929,7 @@ static void elan_ktf3k_ts_report_data(struct i2c_client *client, uint8_t *buf)
               fbits = fbits >> 1;
               idx += 3;
 	    }
+		input_mt_report_pointer_emulation(ts->input_dev, true);
           input_sync(idev);
 	} // checksum
 	else {
@@ -956,7 +957,6 @@ static void elan_ktf3k_ts_report_data2(struct i2c_client *client, uint8_t *buf)
 	if ( (num < 3) || ((checksum & 0x00ff) == buf[34])) {   
           fbits = buf[2] & 0x30;	
 	    fbits = (fbits << 4) | buf[1]; 
-	    //input_report_key(idev, BTN_TOUCH, 1);
           for(i = 0; i < FINGER_NUM; i++){
               active = fbits & 0x1;
               if(active || mTouchStatus[i]){
@@ -979,6 +979,7 @@ static void elan_ktf3k_ts_report_data2(struct i2c_client *client, uint8_t *buf)
               fbits = fbits >> 1;
               idx += 3;
 	    }
+		input_mt_report_pointer_emulation(ts->input_dev, true);
           input_sync(idev);
 	} // checksum
 	else {
@@ -1505,10 +1506,14 @@ static int elan_ktf3k_ts_probe(struct i2c_client *client,
 	}
 	ts->input_dev->name = "elan-touchscreen";  
 
-	//set_bit(BTN_TOUCH, ts->input_dev->keybit);
+	set_bit(BTN_TOUCH, ts->input_dev->keybit);
 	ts->abs_x_max =  pdata->abs_x_max;
 	ts->abs_y_max = pdata->abs_y_max;
 	touch_debug(DEBUG_INFO, "[Elan] Max X=%d, Max Y=%d\n", ts->abs_x_max, ts->abs_y_max);
+
+	input_set_abs_params(ts->input_dev, ABS_X, pdata->abs_y_min, pdata->abs_y_max, 0, 0); // for 800 * 1280
+	input_set_abs_params(ts->input_dev, ABS_Y, pdata->abs_x_min, pdata->abs_x_max, 0, 0); // for 800 * 1280
+	input_set_abs_params(ts->input_dev, ABS_PRESSURE, 0, MAX_FINGER_PRESSURE, 0, 0);
 
 	input_mt_init_slots(ts->input_dev, FINGER_NUM);
 	input_set_abs_params(ts->input_dev, ABS_MT_POSITION_X, pdata->abs_y_min,  pdata->abs_y_max, 0, 0); // for 800 * 1280 

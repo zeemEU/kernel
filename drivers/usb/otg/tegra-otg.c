@@ -188,7 +188,7 @@ static void irq_work(struct work_struct *work)
 		container_of(work, struct tegra_otg_data, work);
 	struct otg_transceiver *otg = &tegra->otg;
 	enum usb_otg_state from = otg->state;
-	enum usb_otg_state to = OTG_STATE_UNDEFINED;
+	enum usb_otg_state to;
 	unsigned long flags;
 	unsigned long status;
 
@@ -204,47 +204,37 @@ static void irq_work(struct work_struct *work)
 
 	status = tegra->int_status;
 
-	if (tegra->int_status & USB_ID_INT_STATUS) {
-		if (status & USB_ID_STATUS) {
-			if ((status & USB_VBUS_STATUS) && (from != OTG_STATE_A_HOST))
-				to = OTG_STATE_B_PERIPHERAL;
-			else
-				to = OTG_STATE_A_SUSPEND;
-		}
+	if (status & USB_ID_STATUS) {
+		if ((status & USB_VBUS_STATUS) && from != OTG_STATE_A_HOST)
+			to = OTG_STATE_B_PERIPHERAL;
 		else
-			to = OTG_STATE_A_HOST;
+			to = OTG_STATE_A_SUSPEND;
 	}
-	if (from != OTG_STATE_A_HOST) {
-		if (tegra->int_status & USB_VBUS_INT_STATUS) {
-			if (status & USB_VBUS_STATUS)
-				to = OTG_STATE_B_PERIPHERAL;
-			else
-				to = OTG_STATE_A_SUSPEND;
-		}
-	}
+	else
+		to = OTG_STATE_A_HOST;
+
 	spin_unlock_irqrestore(&tegra->lock, flags);
 
-	if (to != OTG_STATE_UNDEFINED) {
+	if (to != from) {
 		otg->state = to;
 
 		dev_info(tegra->otg.dev, "%s --> %s\n", tegra_state_name(from),
 					      tegra_state_name(to));
 
+		/*
 		if (tegra->charger_cb)
 			tegra->charger_cb(to, from, tegra->charger_cb_data);
+		*/
 
-		if (to == OTG_STATE_A_SUSPEND) {
-			if (from == OTG_STATE_A_HOST)
-				tegra_stop_host(tegra);
-			else if (from == OTG_STATE_B_PERIPHERAL && otg->gadget)
-				usb_gadget_vbus_disconnect(otg->gadget);
-		} else if (to == OTG_STATE_B_PERIPHERAL && otg->gadget) {
-			if (from == OTG_STATE_A_SUSPEND)
-				usb_gadget_vbus_connect(otg->gadget);
-		} else if (to == OTG_STATE_A_HOST) {
-			if (from == OTG_STATE_A_SUSPEND)
+		if (from == OTG_STATE_A_HOST)
+			tegra_stop_host(tegra);
+		else if (from == OTG_STATE_B_PERIPHERAL && otg->gadget)
+			usb_gadget_vbus_disconnect(otg->gadget);
+
+		if (to == OTG_STATE_A_HOST)
 			tegra_start_host(tegra);
-		}
+		else if (to == OTG_STATE_B_PERIPHERAL && otg->gadget)
+			usb_gadget_vbus_connect(otg->gadget);
 	}
 
 
